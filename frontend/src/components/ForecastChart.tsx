@@ -12,7 +12,7 @@ interface ForecastChartProps {
 
 const ForecastChart: React.FC<ForecastChartProps> = ({ data }) => {
   if (data.status === 'error' || !data.historical) {
-    return <div className="p-4 text-gray-500 bg-gray-50 rounded text-center">Forecasting not available for this dataset. {data.message || ''}</div>;
+    return <div className="p-4 text-gray-500 bg-gray-50 rounded text-center">Forecasting not available for this dataset. {""}</div>;
   }
 
   // Merge historical and forecast data for the chart

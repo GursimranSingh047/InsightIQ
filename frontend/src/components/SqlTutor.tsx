@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Send, Terminal, BookOpen, Brain, Zap, HelpCircle } from 'lucide-react';
+import { Send, Terminal, Activity, BookOpen, Brain, Zap, HelpCircle } from 'lucide-react';
 
 interface SqlTutorProps {
   schemaInfo: any;

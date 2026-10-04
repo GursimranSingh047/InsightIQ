@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertTriangle, Activity } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
 
 interface AnomalyListProps {
   anomalies: any[];
