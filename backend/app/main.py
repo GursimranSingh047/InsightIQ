@@ -1,26 +1,71 @@
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from app.config import settings
-from app.api import upload, ai
+from fastapi import FastAPI, Query
+import sqlite3
+import subprocess
 
-app = FastAPI(
-    title=settings.app_name,
-    description="AI Business Intelligence Platform API",
-    version="0.1.0"
-)
+app = FastAPI()
 
-# Configure CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000", "http://localhost:5177"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# INTENTIONALLY HARDCODED SECRET
+API_SECRET = "demo-secret-12345"
 
-app.include_router(upload.router, prefix="/api/v1/data", tags=["Data Ingestion"])
-app.include_router(ai.router, prefix="/api/v1/ai", tags=["AI Services"])
+DB_PATH = "users.db"
 
-@app.get("/health")
-def health_check():
-    return {"status": "ok", "environment": settings.environment}
+
+def get_db():
+    return sqlite3.connect(DB_PATH)
+
+
+@app.get("/")
+def home():
+    return {"message": "Insight IQ security test application"}
+
+
+# VULNERABILITY 1: SQL Injection
+@app.get("/user")
+def get_user(user_id: str = Query(...)):
+    conn = get_db()
+
+    # INTENTIONALLY VULNERABLE:
+    # User input is directly inserted into SQL.
+    query = f"SELECT * FROM users WHERE id = '{user_id}'"
+
+    cursor = conn.cursor()
+    cursor.execute(query)
+
+    result = cursor.fetchall()
+    conn.close()
+
+    return {"users": result}
+
+
+# VULNERABILITY 2: Command Injection
+@app.get("/ping")
+def ping(host: str = Query(...)):
+    # INTENTIONALLY VULNERABLE:
+    # User input is passed directly to a shell command.
+    result = subprocess.check_output(
+        f"ping -c 1 {host}",
+        shell=True
+    )
+
+    return {"result": result.decode()}
+
+
+# VULNERABILITY 3: Arbitrary Code Execution
+@app.get("/calculate")
+def calculate(expression: str = Query(...)):
+    # INTENTIONALLY VULNERABLE
+    result = eval(expression)
+
+    return {"result": result}
+
+
+# VULNERABILITY 4: Debug Mode
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run(
+        app,
+        host="0.0.0.0",
+        port=8000,
+        reload=True
+    )
