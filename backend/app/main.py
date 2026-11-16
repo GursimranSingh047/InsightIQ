@@ -24,12 +24,10 @@ def home():
 def get_user(user_id: str = Query(...)):
     conn = get_db()
 
-    # INTENTIONALLY VULNERABLE:
-    # User input is directly inserted into SQL.
-    query = f"SELECT * FROM users WHERE id = '{user_id}'"
-
+    # SECURE: Use a parameterized query to separate code from data.
+    query = "SELECT * FROM users WHERE id = ?"
     cursor = conn.cursor()
-    cursor.execute(query)
+    cursor.execute(query, (user_id,))
 
     result = cursor.fetchall()
     conn.close()
