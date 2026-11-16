@@ -1,6 +1,6 @@
 # System Architecture
 
-InsightIQ uses a modern decoupled architecture, separating a React-based single-page application from a Python/FastAPI data processing backend.
+InsightIQ uses a modern decoupled architecture, separating a React-based single-page application from a Python/FastAPI data processing backend.Three tier architecture system.
 
 ## High-Level Flow
 
