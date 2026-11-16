@@ -6,7 +6,7 @@ InsightIQ is a production-quality AI, Data, and Backend analytics platform. It a
 
 ## Problem
 
-Traditional business intelligence tools require significant technical expertise, complex SQL knowledge, or dedicated data teams to extract meaningful insights. Business users often struggle to quickly analyze data, detect anomalies, or generate forecasts without specialized help.
+Traditional business intelligence tools require significant technical expertise, complex SQL knowledge, or dedicated data teams to extract meaningful insights. Business users often struggle to quickly analyze data, detect anomalies, or generate forecasts without specialized help.It helps business to oversee their growth and expenditure.
 
 ## Solution
 
