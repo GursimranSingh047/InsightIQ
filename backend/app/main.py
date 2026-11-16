@@ -40,11 +40,9 @@ def get_user(user_id: str = Query(...)):
 # VULNERABILITY 2: Command Injection
 @app.get("/ping")
 def ping(host: str = Query(...)):
-    # INTENTIONALLY VULNERABLE:
-    # User input is passed directly to a shell command.
     result = subprocess.check_output(
-        f"ping -c 1 {host}",
-        shell=True
+        ["ping", "-c", "1", host],
+        shell=False
     )
 
     return {"result": result.decode()}
