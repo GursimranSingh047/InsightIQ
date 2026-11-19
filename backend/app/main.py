@@ -1,11 +1,14 @@
 from fastapi import FastAPI, Query
 import sqlite3
+import os
 import subprocess
 
 app = FastAPI()
 
-# INTENTIONALLY HARDCODED SECRET
-API_SECRET = "demo-secret-12345"
+# Load secret from environment variable; fail fast if missing
+API_SECRET = os.environ.get("API_SECRET")
+if not API_SECRET:
+    raise RuntimeError("API_SECRET environment variable not set")
 
 DB_PATH = "users.db"
 
