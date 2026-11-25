@@ -1,16 +1,35 @@
 from fastapi import FastAPI, Query
 import sqlite3
+import os
+import sqlite3
 import subprocess
 
 app = FastAPI()
 
-# INTENTIONALLY HARDCODED SECRET
-API_SECRET = "demo-secret-12345"
+DB_PATH = os.environ.get("APP_DB_PATH", "users.db")
 
-DB_PATH = "users.db"
+
+def _load_api_secret() -> str:
+    """Resolve the API secret from the environment / secret manager.
+
+    No credential material is stored in source. The process fails closed if
+    the secret is not provisioned, so the service never runs with an
+    unauthenticated or default-credential configuration.
+    """
+    secret = os.environ.get("API_SECRET")
+    if not secret:
+        raise RuntimeError(
+            "API_SECRET is not configured. Provision it via the environment "
+            "or a dedicated secret manager before starting the application."
+        )
+    return secret
+
+
+API_SECRET = _load_api_secret()
 
 
 def get_db():
+    return sqlite3.connect(DB_PATH)
     return sqlite3.connect(DB_PATH)
 
 
